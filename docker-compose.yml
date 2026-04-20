@@ -1,0 +1,9 @@
+services:
+  agent:
+    build: .
+    container_name: xray_log_agent
+    volumes:
+      - /opt/remnanode/xray-logs/xray.out.log:/var/log/xray/xray.out.log
+    env_file:
+      - .env
+    restart: always
