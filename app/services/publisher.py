@@ -1,14 +1,17 @@
 import asyncio
 import logging
+
+from faststream.nats import NatsBroker
+
 from app.config import settings
-from app.services.xray_parser import parse_line
 from app.services.log_reader import LogReader
+from app.services.xray_parser import parse_line
 
 logger = logging.getLogger(__name__)
 
 
 class LogPublisher:
-    def __init__(self, broker) -> None:
+    def __init__(self, broker: NatsBroker) -> None:
         self._broker = broker
         self._reader = LogReader()
         self._pending: list[str] = []
@@ -38,7 +41,10 @@ class LogPublisher:
                     self._broker_healthy = True
             except Exception:
                 if self._broker_healthy:
-                    logger.error("NATS недоступен! Накоплено строк в буфере: %d", len(self._pending))
+                    logger.error(
+                        "NATS недоступен! Накоплено строк в буфере: %d",
+                        len(self._pending),
+                    )
                     self._broker_healthy = False
 
     async def _process_once(self) -> None:
@@ -63,7 +69,9 @@ class LogPublisher:
                 continue
             try:
                 await asyncio.wait_for(
-                    self._broker.publish(entry.model_dump(mode="json"), subject=settings.nats_subject),
+                    self._broker.publish(
+                        entry.model_dump(mode="json"), subject=settings.nats_subject
+                    ),
                     timeout=5.0,
                 )
                 published += 1

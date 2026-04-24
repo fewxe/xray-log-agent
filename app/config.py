@@ -4,6 +4,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     log_file: str
     nats_url: str
+    nats_tls_hostname: str
+    nats_port: int
+    nats_token: str
     nats_subject: str
     batch_size: int = 100
     poll_interval: float = 1.0
