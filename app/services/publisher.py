@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import re
 
 from faststream.nats import NatsBroker
 
@@ -16,6 +17,11 @@ class LogPublisher:
         self._reader = LogReader()
         self._pending: list[str] = []
         self._broker_healthy = True
+        self._dest_filter = (
+            re.compile(settings.dest_filter_regex)
+            if settings.dest_filter_regex is not None
+            else None
+        )
 
     async def run(self) -> None:
         logger.info(
@@ -67,6 +73,10 @@ class LogPublisher:
             entry = parse_line(line)
             if entry is None:
                 continue
+
+            if self._dest_filter and not self._dest_filter.search(entry.destination):
+                continue
+
             try:
                 await asyncio.wait_for(
                     self._broker.publish(

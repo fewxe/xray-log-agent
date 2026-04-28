@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +12,7 @@ class Settings(BaseSettings):
     batch_size: int = 100
     poll_interval: float = 1.0
     max_pending: int
+    dest_filter_regex: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -1,5 +1,5 @@
-import re
 import logging
+import re
 
 from app.models.log_entry import LogEntry
 

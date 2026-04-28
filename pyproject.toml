@@ -11,3 +11,48 @@ dependencies = [
     "pydantic-settings>=2.13.1",
     "uvicorn>=0.41.0",
 ]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.20.2",
+    "ruff>=0.15.12",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+lint.select = [
+    "C",
+    "DTZ",
+    "E",
+    "F",
+    "I",
+    "ICN",
+    "N",
+    "PLC",
+    "PLE",
+    "Q",
+    "T",
+    "W",
+    "YTT",
+]
+lint.ignore = ["N805"]
+exclude = ["venv", ".venv", ".idea", "tests"]
+
+[tool.mypy]
+packages = ["src"]
+plugins = ["sqlalchemy.ext.mypy.plugin", "pydantic.mypy"]
+exclude = ["venv", ".venv", ".idea", "tests"]
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+extra_checks = true
+explicit_package_bases = true
