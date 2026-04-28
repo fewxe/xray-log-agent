@@ -94,10 +94,9 @@ class LogPublisher:
 
         self._pending = failed
 
-        if published:
-            logger.info(
-                "Опубликовано %d | в буфере %d | всего строк было %d",
-                published,
-                len(self._pending),
-                len(new_lines),
-            )
+        logger.info(
+            "Опубликовано %d | в буфере %d | всего строк было %d",
+            published,
+            len(self._pending),
+            len(new_lines),
+        )
